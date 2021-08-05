@@ -14,7 +14,7 @@ from PIL import Image, ExifTags
 from torch.utils.data import Dataset
 from tqdm import tqdm
 
-from utils.general import xyxy2xywh, xywh2xyxy, torch_distributed_zero_first
+from domain.services.trackers.player_tracker.ScaledYOLOv4.utils.general import xyxy2xywh, xywh2xyxy, torch_distributed_zero_first
 
 help_url = ''
 img_formats = ['.bmp', '.jpg', '.jpeg', '.png', '.tif', '.tiff', '.dng']
@@ -70,6 +70,23 @@ def create_dataloader(path, imgsz, batch_size, stride, opt, hyp=None, augment=Fa
                                              collate_fn=LoadImagesAndLabels.collate_fn)
     return dataloader, dataset
 
+
+class PrepareSingleImage:
+    def __init__(self, image, img_size):
+        self.image = image
+        self.img_size = img_size
+
+    def prepare(self):
+        img0 = self.image
+
+        # Padded resize
+        img = letterbox(img0, new_shape=self.img_size)[0]
+
+        # Convert
+        img = img[:, :, ::-1].transpose(2, 0, 1)  # BGR to RGB, to 3x416x416
+        img = np.ascontiguousarray(img)
+
+        return img, img0
 
 class LoadImages:  # for inference
     def __init__(self, path, img_size=640):

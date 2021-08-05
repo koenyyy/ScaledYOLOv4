@@ -2,11 +2,11 @@ import argparse
 
 import torch
 
-from utils.google_utils import attempt_download
+from domain.services.trackers.player_tracker.ScaledYOLOv4.utils.google_utils import attempt_download
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', type=str, default='./yolov4-p5.pt', help='weights path')
+    parser.add_argument('--weights', type=str, default='./network.pt', help='weights path')
     parser.add_argument('--img-size', nargs='+', type=int, default=[640, 640], help='image size')
     parser.add_argument('--batch-size', type=int, default=1, help='batch size')
     opt = parser.parse_args()
