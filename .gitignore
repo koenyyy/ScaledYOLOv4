@@ -1,0 +1,10 @@
+/venv/
+*.PYC
+.idea
+data/
+.mp4
+*.log
+src/animator_tmp.log
+*.weights
+/wsl_venv/
+network.pt
